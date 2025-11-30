@@ -1,0 +1,98 @@
+<!doctype html>
+<html lang="pt-br">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Painel de Campanha (WhatsApp)</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-slate-900 text-slate-100 min-h-screen">
+  <div class="max-w-6xl mx-auto p-6">
+    <h1 class="text-2xl font-bold mb-4">Painel de Campanha</h1>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <!-- Coluna Esquerda -->
+      <div class="bg-slate-800 rounded-2xl p-4 shadow">
+        <label class="block text-sm mb-2">Mensagem</label>
+        <textarea id="message" rows="6" class="w-full bg-slate-900 rounded-xl p-3 outline-none" placeholder="Escreva a mensagem aqui (obrigatório)"></textarea>
+
+        <div class="grid grid-cols-2 gap-4 mt-4">
+          <div>
+            <label class="block text-sm mb-2">Envios por vez (lote)</label>
+            <input id="batch" type="number" value="1" min="1" class="w-full bg-slate-900 rounded-xl p-3 outline-none">
+            <p class="text-[11px] text-slate-400 mt-1">
+              Cuidado: lotes grandes aumentam o risco de restrições. Ajuste com moderação.
+            </p>
+          </div>
+          <div>
+            <label class="block text-sm mb-2">Duração (min)</label>
+            <input id="duration" type="number" value="60" min="1" class="w-full bg-slate-900 rounded-xl p-3 outline-none">
+          </div>
+        </div>
+
+        <div class="flex items-center gap-3 mt-4">
+          <button id="btn-start" class="bg-emerald-600 hover:bg-emerald-500 px-4 py-2 rounded-xl">Iniciar</button>
+          <button id="btn-pause" class="bg-amber-600 hover:bg-amber-500 px-4 py-2 rounded-xl">Pausar</button>
+          <button id="btn-resume" class="bg-sky-600 hover:bg-sky-500 px-4 py-2 rounded-xl">Retomar</button>
+          <button id="btn-stop" class="bg-rose-600 hover:bg-rose-500 px-4 py-2 rounded-xl">Parar</button>
+        </div>
+      </div>
+
+      <!-- Coluna Direita -->
+      <div class="bg-slate-800 rounded-2xl p-4 shadow">
+        <div class="flex items-center justify-between">
+          <label class="block text-sm">Números (Brasil, um por linha)</label>
+          <button id="btn-validar" class="text-xs bg-slate-700 px-3 py-1 rounded-lg">Validar</button>
+        </div>
+        <textarea id="numbers" rows="8" class="w-full bg-slate-900 rounded-xl p-3 outline-none" placeholder="+55DDDNNNNNNNN (um por linha)"></textarea>
+        <p class="text-xs text-slate-400 mt-2">Válidos: <span id="validos">0</span></p>
+      </div>
+    </div>
+
+    <div class="bg-slate-800 rounded-2xl p-4 shadow mt-6">
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <div>
+          <img id="qr" class="hidden w-40 h-40 rounded-xl border border-white/10" alt="QR Code">
+          <p id="waStatus" class="text-sm text-slate-300 mt-2">Aguardando conexão…</p>
+        </div>
+        <div>
+          <h2 class="font-semibold mb-2">Resumo</h2>
+          <ul class="text-sm space-y-1">
+            <li>Total: <span id="total">0</span></li>
+            <li>Enviados: <span id="enviados">0</span></li>
+            <li>Falhas: <span id="falhas">0</span></li>
+            <li>Atual: <span id="atual">—</span></li>
+            <li>Rodando: <span id="rodando">NÃO</span></li>
+          </ul>
+        </div>
+        <div>
+          <h2 class="font-semibold mb-2">Ações rápidas</h2>
+          <ul class="text-xs text-slate-300 space-y-2">
+            <li><b>Use somente com opt-in</b>: envie apenas para quem consentiu e ofereça descadastro.</li>
+            <li><b>Lotes</b>: comece com <u>1–3 envios por vez</u> e ajuste segundo o risco.</li>
+            <li><b>Personalize</b> e evite repetir a mesma mensagem.</li>
+          </ul>
+          <p class="text-[10px] text-slate-400 mt-2">
+            O WhatsApp proíbe disparo em massa/automação não autorizada e exige consentimento do usuário.
+            Use com responsabilidade para reduzir o risco de restrições na conta.
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
+      <div class="bg-slate-800 rounded-2xl p-4 shadow">
+        <h3 class="font-semibold mb-2">Relatório (tempo real) — Enviados</h3>
+        <div id="log-ok" class="bg-slate-900 rounded-xl min-h-[160px]"></div>
+      </div>
+      <div class="bg-slate-800 rounded-2xl p-4 shadow">
+        <h3 class="font-semibold mb-2">Falhas</h3>
+        <div id="log-fail" class="bg-slate-900 rounded-xl min-h-[160px]"></div>
+      </div>
+    </div>
+  </div>
+
+  <script src="/socket.io/socket.io.js"></script>
+  <script src="/client.js"></script>
+</body>
+</html>
